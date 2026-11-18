@@ -1,0 +1,6 @@
+/vendor/
+/node_modules/
+/.env
+/public/css/app.css
+storage/*.db-wal
+storage/*.db-shm

@@ -1,0 +1,28 @@
+{% extends 'layout.twig' %}
+{% block title %}Home · YT Calendar{% endblock %}
+
+{% block body %}
+<header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <span class="text-lg font-semibold tracking-tight">YT Calendar</span>
+        <div class="flex items-center gap-3">
+            {% if user.avatar %}
+            <img src="{{ user.avatar }}" alt="" referrerpolicy="no-referrer" class="size-8 rounded-full">
+            {% endif %}
+            <span class="hidden text-sm text-slate-600 sm:inline">{{ user.email }}</span>
+            <form method="post" action="/logout">
+                <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+                <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+                <button type="submit" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-300 transition hover:bg-slate-50">
+                    Sign out
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-4 py-12">
+    <h1 class="text-3xl font-semibold tracking-tight">Welcome, {{ user.name ?: user.email }} 👋</h1>
+    <p class="mt-2 text-slate-500">You're signed in. This is the homepage.</p>
+</main>
+{% endblock %}

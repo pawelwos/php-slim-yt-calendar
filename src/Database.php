@@ -16,9 +16,13 @@ final class Database
 
         // Journal mode is left at the file's default so merely reading
         // doesn't modify the git-tracked database file.
-        return new PDO('sqlite:' . $path, options: [
+        $pdo = new PDO('sqlite:' . $path, options: [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
+        // Wait instead of failing if the sync job is writing while the site reads (or vice versa).
+        $pdo->exec('PRAGMA busy_timeout = 5000');
+
+        return $pdo;
     }
 }

@@ -1,6 +1,10 @@
+/.server/
 /vendor/
 /node_modules/
 /.env
 /public_html/css/app.css
 storage/*.db-wal
 storage/*.db-shm
+/storage/youtube-token.json
+/storage/logs/
+/storage/sync.lock

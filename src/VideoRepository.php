@@ -53,4 +53,29 @@ final class VideoRepository
 
         return $stmt->fetchAll();
     }
+
+    public function exists(string $videoId): bool
+    {
+        $stmt = $this->pdo->prepare('SELECT 1 FROM youtube WHERE videoId = :id');
+        $stmt->execute(['id' => $videoId]);
+        return $stmt->fetchColumn() !== false;
+    }
+
+    /** Insert a video unless its ID is already present. Returns true if a row was added. */
+    public function insertIfMissing(string $videoId, string $title, string $source, string $date, string $effectiveDate): bool
+    {
+        $stmt = $this->pdo->prepare(<<<'SQL'
+            INSERT OR IGNORE INTO youtube (videoId, title, source, date, effective_date)
+            VALUES (:id, :title, :source, :date, :effective)
+        SQL);
+        $stmt->execute([
+            'id' => $videoId,
+            'title' => $title,
+            'source' => $source,
+            'date' => $date,
+            'effective' => $effectiveDate,
+        ]);
+
+        return $stmt->rowCount() > 0;
+    }
 }

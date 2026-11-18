@@ -10,17 +10,15 @@ final class Database
 {
     public static function connect(string $path): PDO
     {
-        $dir = dirname($path);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
+        if (!is_file($path)) {
+            throw new \RuntimeException("SQLite database not found: $path");
         }
 
-        $pdo = new PDO('sqlite:' . $path, options: [
+        // Journal mode is left at the file's default so merely reading
+        // doesn't modify the git-tracked database file.
+        return new PDO('sqlite:' . $path, options: [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
-        $pdo->exec('PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL;');
-
-        return $pdo;
     }
 }

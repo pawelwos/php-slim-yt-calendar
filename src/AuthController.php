@@ -46,10 +46,10 @@ final class AuthController
         unset($_SESSION['oauth2_state']);
 
         if (isset($q['error'])) {
-            return $this->fail($response, 'Google sign-in was cancelled.');
+            return $this->fail($response, 'Logowanie przez Google zostało anulowane.');
         }
         if (empty($q['code']) || empty($q['state']) || $state === null || !hash_equals($state, (string) $q['state'])) {
-            return $this->fail($response, 'Invalid sign-in request. Please try again.');
+            return $this->fail($response, 'Nieprawidłowe żądanie logowania. Spróbuj ponownie.');
         }
 
         try {
@@ -57,7 +57,7 @@ final class AuthController
             $owner = $this->provider->getResourceOwner($token);
         } catch (\Throwable $e) {
             error_log('OAuth error: ' . $e->getMessage());
-            return $this->fail($response, 'Could not complete sign-in with Google.');
+            return $this->fail($response, 'Nie udało się dokończyć logowania przez Google.');
         }
 
         $email = strtolower((string) $owner->getEmail());
@@ -65,7 +65,7 @@ final class AuthController
         $verified = $data['email_verified'] ?? $data['verified_email'] ?? false;
 
         if ($email === '' || !$verified || !in_array($email, $this->allowedEmails, true)) {
-            return $this->fail($response, 'The account ' . $email . ' is not allowed to access this site.');
+            return $this->fail($response, 'Konto ' . $email . ' nie ma dostępu do tej strony.');
         }
 
         session_regenerate_id(true);

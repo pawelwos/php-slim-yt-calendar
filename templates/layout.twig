@@ -1,12 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="pl" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}YT Calendar{% endblock %}</title>
+    <title>{% block title %}YT Kalendarz{% endblock %}</title>
     <link rel="stylesheet" href="/css/app.css">
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased">
+<body class="min-h-full bg-slate-50 text-slate-900 antialiased">
+    {% if user %}
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+            <div class="flex items-center gap-6">
+                <a href="/" class="text-lg font-semibold tracking-tight">YT Kalendarz</a>
+                <nav aria-label="Main">
+                    <a href="/calendar"
+                       class="rounded-md px-3 py-1.5 text-sm font-medium {{ active_nav|default('') == 'calendar' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100' }}">
+                        Kalendarz
+                    </a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-3">
+                {% if user.avatar %}
+                <img src="{{ user.avatar }}" alt="" referrerpolicy="no-referrer" class="size-8 rounded-full">
+                {% endif %}
+                <span class="hidden text-sm text-slate-600 sm:inline">{{ user.email }}</span>
+                <form method="post" action="/logout">
+                    <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+                    <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+                    <button type="submit" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-300 transition hover:bg-slate-50">
+                        Wyloguj
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+    {% endif %}
     {% block body %}{% endblock %}
 </body>
 </html>

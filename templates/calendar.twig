@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+{% set active_nav = 'calendar' %}
+{% block title %}{{ cal.title|capitalize }} · YT Kalendarz{% endblock %}
+
+{% block body %}
+<main class="mx-auto max-w-6xl px-4 py-8">
+    <div class="grid gap-8 lg:grid-cols-[24rem_1fr]">
+        {% include '_calendar.twig' with {navigation: true} %}
+        {% if selected %}
+            {% include '_videos.twig' with {heading: selected|localdate('EEEE, d MMMM y')|capitalize} %}
+        {% else %}
+            <p class="rounded-lg border border-dashed border-slate-300 bg-white px-4 py-8 text-center text-sm text-slate-500">Wybierz datę, aby zobaczyć filmy.</p>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
